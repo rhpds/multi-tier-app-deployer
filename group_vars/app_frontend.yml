@@ -1,0 +1,54 @@
+---
+
+foo: reading group_vars
+
+flask_app_name: resource_hub
+flask_user: flask
+flask_home: /opt/
+flask_repo: https://github.com/redhat-gpe/multi-tier-app.git
+#flask_scm_ref: next-gen
+flask_app_lauch_script: /usr/local/bin/launch_resource_hub   
+
+virtualenv_name: "venv-{{ flask_app_name }}"  
+virtualenv_home: /opt/virtual_envs
+virtualenv_python: /usr/bin/python3
+
+app_yum_packages:
+  - autoconf
+  - automake
+  - git
+  - gcc
+  - libtool
+  # - libpq-devel
+  # - perl
+  # - pg_config
+  #- python3.9
+  - python3-devel
+  # - python3-pip
+  # - psycopg2
+
+pip_dependencies:
+  - flask
+  - flask_bootstrap
+  - flask_sqlalchemy
+  - psycopg2-binary
+  - "click==7.1.2"
+  - "dominate==2.5.1"
+  - "Flask==1.1.2"
+  - "Flask-Bootstrap==3.3.7.1"
+  - "Flask-SQLAlchemy==2.4.4"
+  - "Flask-WTF==0.14.3"
+  - "itsdangerous==1.1.0"
+  - "Jinja2==2.11.2"
+  - "MarkupSafe==1.1.1"
+  - "psycopg2-binary"
+  - "SQLAlchemy==1.3.18"
+  - "visitor==0.1.3"
+  - "Werkzeug==1.0.1"
+  - "WTForms==2.3.1"
+  # - "virtualenv==20.0.28"
+  # - pip
+
+postgres_rhel9_repo: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+postgres_library: python3-psycopg2
+
