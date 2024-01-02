@@ -18,6 +18,21 @@
     name: postgres
     state: absent
 
+    flask_app_name: resource_hub
+    flask_user: flask
+    flask_home: /opt/
+    flask_repo: https://github.com/redhat-gpe/multi-tier-app.git
+    flask_scm_ref: main
+    flask_app_lauch_script: /usr/local/bin/launch_resource_hub
+    virtualenv_name: "venv-{{ flask_app_name }}"
+    virtualenv_home: /opt/virtual_envs
+    virtualenv_python: /usr/bin/python3
+    pip_dependencies: []
+    # - virtualenv
+    # - pip
+    # - psycopg2-binary
+
+
 - name: Clean up service when it exists
   block:
 
@@ -76,4 +91,19 @@
     - "{{ virtualenv_home }}/{{ flask_app_name }}"
   loop_control:
     loop_var: __path
+
+vars:
+load_balancer_packages:
+  - haproxy
+
+- name: Remove load balancer packages
+  ansible.builtin.package:
+    name: "{{ load_balancer_packages }}"
+    state: absent
+
+- name: configure haproxy
+  ansible.builtin.file:
+    path: /etc/haproxy/haproxy.cfg
+    state: absent
+
 ...
