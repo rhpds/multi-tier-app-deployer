@@ -1,4 +1,5 @@
 ---
-collections:
-  - name: community.general
-    version: 4.6.1
+roles:
+
+  - name: geerlingguy.postgresql
+    version: 3.5.0

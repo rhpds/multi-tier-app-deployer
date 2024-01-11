@@ -2,8 +2,8 @@
 - name: Add database IP address to app servers /etc/hosts
   ansible.builtin.lineinfile:
     dest: /etc/hosts
-    regexp: '.*appdb1$'
-    line: "{{ groups.database_servers[0] }} database01"
+    regexp: '.*app_frontend$'
+    line: "{{ groups.app_backend[0] }} app-backend"
 #    line: "{{ hostvars['appdb1']['ansible_default_ipv4']['address'] }} appdb1"
     state: present
 
@@ -18,7 +18,7 @@
     state: present
     disable_gpg_check: true
   loop: 
-    - "{{ postgres_rhel8_repo }}"
+    - "{{ postgres_rhel9_repo }}"
     - "{{ app_yum_packages }}"        
     - "{{ postgres_library }}"
   loop_control:
@@ -28,9 +28,11 @@
   ansible.builtin.git:
     repo: "{{ flask_repo }}"
     dest: "{{ flask_home }}/{{ flask_app_name }}"
+    version: rh1-2023-aap2-containerized
     #    version: next-gen
     update: yes 
     force: yes
+  ignore_errors: true
   tags:
     - git
 
@@ -39,27 +41,24 @@
     dest: "{{ flask_home }}/{{ flask_app_name }}"
     owner: "{{ flask_user }}"
 
-- name: virtualenv setup
+- name: Python setup
   block:
 
     - name: Setup pre-requisite pip3 packages
       ansible.builtin.pip:
         name: "{{ pip_dependencies }}"
         state: latest
-        executable: /usr/bin/pip3.8
+        executable: /usr/bin/pip3.9
 
-    - name: "Create virtualenv {{ virtualenv_name }} for Flask"
-      ansible.builtin.pip:
-        requirements: "{{ flask_home }}/{{ flask_app_name }}/requirements.txt"
-        virtualenv: "{{ virtualenv_home }}/{{ flask_app_name }}"
-        virtualenv_site_packages: no
-        virtualenv_command: /usr/local/bin/virtualenv
-  tags:
-    - venv
-    - virtualenv  
+    # - name: "Create virtualenv {{ virtualenv_name }} for Flask"
+    #   ansible.builtin.pip:
+    #     requirements: "{{ flask_home }}/{{ flask_app_name }}/requirements.txt"
+    #     virtualenv: "{{ virtualenv_home }}/{{ flask_app_name }}"
+    #     virtualenv_site_packages: no
+    #     virtualenv_command: /usr/local/bin/virtualenv
       
 - name: Initialize flask app database resources
-  ansible.builtin.command: "{{ virtualenv_home }}/{{ flask_app_name }}/bin/python3 {{ flask_home }}/{{ flask_app_name }}/config.py"
+  ansible.builtin.command: "/usr/bin/python3 {{ flask_home }}/{{ flask_app_name }}/config.py"
   run_once: true
 
 - name: "Generate {{ flask_app_name }} startup script"    

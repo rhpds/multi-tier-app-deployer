@@ -1,37 +1,37 @@
 ---
-
-- name: Deploy, configure, and populate Postgres 12
-  hosts: database_servers
+- name: Install multi-tier-app postgres backend
+  hosts: app_backend
+  gather_facts: true
   become: true
-  gather_facts: false
   tags:
-    - database_servers
+    - app_backend
 
-  roles:
-  
-    - postgres
+  tasks:
 
-- name: Deploy, configure, and populate flask repo and virtualenv
-  hosts: app_servers
+    - name: Install Postgresql
+      ansible.builtin.include_role:
+        name: geerlingguy.postgresql
+
+- name: Deploy, configure, and populate flask application
+  hosts: app_frontend
   become: true
   gather_facts: true
   tags:
-    - application_servers
+    - app_frontend
 
   roles:
 
     - flask
-    
-- name: Deploy haproxy load balancer
-  hosts: load_balancers
-  gather_facts: false 
-  become: true
 
+- name: Smoketest application
+  hosts: app_frontend
+  gather_facts: true
+  become: false
   tags:
-    - load_balancers
+    - smoketest
 
   roles:
 
-    - haproxy
+    - smoketest
 
 ...    

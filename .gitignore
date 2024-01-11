@@ -4,4 +4,5 @@ venv
 .vagrant
 archive
 ansible-navigator.log
+roles/*
 
