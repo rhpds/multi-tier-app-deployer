@@ -3,7 +3,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/hosts
     regexp: '.*app_frontend$'
-    line: "{{ groups.app_backend[0] }} app-backend"
+    line: "{{ groups.app_backends[0] }} app-backend"
 #    line: "{{ hostvars['appdb1']['ansible_default_ipv4']['address'] }} appdb1"
     state: present
 
