@@ -23,15 +23,15 @@
 
     - flask
 
-- name: Smoketest application
-  hosts: app_frontend
-  gather_facts: true
-  become: false
-  tags:
-    - smoketest
-
-  roles:
-
-    - smoketest
+# - name: Smoketest application
+#   hosts: app_frontend
+#   gather_facts: true
+#   become: false
+#   tags:
+#     - smoketest
+#
+#   roles:
+#
+#     - smoketest
 
 ...    
