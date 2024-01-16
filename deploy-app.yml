@@ -1,6 +1,6 @@
 ---
 - name: Install multi-tier-app postgres backend
-  hosts: app_backend
+  hosts: app_backends
   gather_facts: true
   become: true
   tags:
@@ -17,7 +17,7 @@
   become: true
   gather_facts: true
   tags:
-    - app_frontend
+    - app_frontends
 
   roles:
 
