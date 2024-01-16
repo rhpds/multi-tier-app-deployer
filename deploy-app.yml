@@ -4,7 +4,7 @@
   gather_facts: true
   become: true
   tags:
-    - app_backend
+    - app_backends
 
   tasks:
 
@@ -13,7 +13,7 @@
         name: geerlingguy.postgresql
 
 - name: Deploy, configure, and populate flask application
-  hosts: app_frontend
+  hosts: app_frontends
   become: true
   gather_facts: true
   tags:
